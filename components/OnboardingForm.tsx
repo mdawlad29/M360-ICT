@@ -133,7 +133,27 @@ export function OnboardingForm() {
         onStepClick={goToStep}
       />
 
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+
+            const validation = validateStep(currentStep);
+
+            if (validation.isValid) {
+              if (currentStep < 5) {
+                handleNext();
+              } else {
+                form.handleSubmit(handleSubmit)();
+              }
+            } else {
+              console.log("Validation failed:", validation.errors);
+            }
+          }
+        }}
+        className="space-y-6"
+      >
         {renderCurrentStep()}
 
         <FormNavigation
