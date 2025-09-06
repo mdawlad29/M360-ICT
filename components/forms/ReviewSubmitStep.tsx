@@ -1,24 +1,34 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { UseFormReturn } from 'react-hook-form';
-import { FormData } from '@/types/form';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { mockManagers, skillsByDepartment, relationships } from '@/data/mockData';
-import { formatSalary, calculateAge } from '@/utils/formUtils';
+import React from "react";
+import { UseFormReturn } from "react-hook-form";
+import { FormData } from "@/types/form";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { mockManagers } from "@/data/mockData";
+import { formatSalary, calculateAge } from "@/utils/formUtils";
 
 interface ReviewSubmitStepProps {
   form: UseFormReturn<FormData>;
 }
 
 export function ReviewSubmitStep({ form }: ReviewSubmitStepProps) {
-  const { watch, setValue, formState: { errors } } = form;
+  const {
+    watch,
+    setValue,
+    formState: { errors },
+  } = form;
   const formData = watch();
-  
-  const selectedManager = mockManagers.find(m => m.id === formData.manager);
+
+  const selectedManager = mockManagers.find((m) => m.id === formData.manager);
   const age = formData.dateOfBirth ? calculateAge(formData.dateOfBirth) : 0;
 
   return (
@@ -48,7 +58,9 @@ export function ReviewSubmitStep({ form }: ReviewSubmitStepProps) {
             </div>
             <div>
               <span className="font-medium">Date of Birth:</span>
-              <p className="text-gray-700">{formData.dateOfBirth} (Age: {age})</p>
+              <p className="text-gray-700">
+                {formData.dateOfBirth} (Age: {age})
+              </p>
             </div>
           </div>
         </div>
@@ -77,7 +89,12 @@ export function ReviewSubmitStep({ form }: ReviewSubmitStepProps) {
             </div>
             <div>
               <span className="font-medium">Salary:</span>
-              <p className="text-gray-700">{formatSalary(formData.salaryExpectation || 0, formData.jobType || '')}</p>
+              <p className="text-gray-700">
+                {formatSalary(
+                  formData.salaryExpectation || 0,
+                  formData.jobType || ""
+                )}
+              </p>
             </div>
             <div>
               <span className="font-medium">Manager:</span>
@@ -96,7 +113,10 @@ export function ReviewSubmitStep({ form }: ReviewSubmitStepProps) {
               <span className="font-medium">Primary Skills:</span>
               <div className="flex flex-wrap gap-2 mt-1">
                 {formData.primarySkills?.map((skill) => (
-                  <span key={skill} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">
+                  <span
+                    key={skill}
+                    className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs"
+                  >
                     {skill} ({formData.skillExperience?.[skill] || 0}yr)
                   </span>
                 ))}
@@ -106,17 +126,22 @@ export function ReviewSubmitStep({ form }: ReviewSubmitStepProps) {
               <div>
                 <span className="font-medium">Working Hours:</span>
                 <p className="text-gray-700">
-                  {formData.preferredWorkingHours?.start} - {formData.preferredWorkingHours?.end}
+                  {formData.preferredWorkingHours?.start} -{" "}
+                  {formData.preferredWorkingHours?.end}
                 </p>
               </div>
               <div>
                 <span className="font-medium">Remote Work:</span>
-                <p className="text-gray-700">{formData.remoteWorkPreference}%</p>
+                <p className="text-gray-700">
+                  {formData.remoteWorkPreference}%
+                </p>
               </div>
             </div>
             {formData.managerApproved && (
               <div>
-                <span className="font-medium text-green-600">✓ Manager Approved Remote Work</span>
+                <span className="font-medium text-green-600">
+                  ✓ Manager Approved Remote Work
+                </span>
               </div>
             )}
             {formData.extraNotes && (
@@ -167,14 +192,18 @@ export function ReviewSubmitStep({ form }: ReviewSubmitStepProps) {
           <Checkbox
             id="confirmCorrect"
             checked={formData.confirmCorrect || false}
-            onCheckedChange={(checked) => setValue('confirmCorrect', checked as boolean)}
+            onCheckedChange={(checked) =>
+              setValue("confirmCorrect", checked as boolean)
+            }
           />
           <Label htmlFor="confirmCorrect" className="text-sm">
             I confirm that all the information provided above is correct *
           </Label>
         </div>
         {errors.confirmCorrect && (
-          <p className="text-sm text-red-600">{errors.confirmCorrect.message}</p>
+          <p className="text-sm text-red-600">
+            {errors.confirmCorrect.message}
+          </p>
         )}
       </CardContent>
     </Card>

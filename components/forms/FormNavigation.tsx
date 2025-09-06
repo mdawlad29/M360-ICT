@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { ChevronLeft, ChevronRight, Send } from 'lucide-react';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight, Send } from "lucide-react";
 
 interface FormNavigationProps {
   currentStep: number;
@@ -27,7 +27,7 @@ export function FormNavigation({
   const isFirstStep = currentStep === 1;
 
   return (
-    <div className="flex justify-between items-center pt-6 border-t">
+    <div className="flex justify-between flex-wrap md:gap-0 gap-2 items-center pt-6 border-t">
       <Button
         type="button"
         variant="outline"

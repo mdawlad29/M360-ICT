@@ -1,57 +1,79 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { UseFormReturn } from 'react-hook-form';
-import { FormData } from '@/types/form';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { mockManagers, departments } from '@/data/mockData';
-import { calculateAge, isWeekend } from '@/utils/formUtils';
+import React, { useEffect, useState } from "react";
+import { UseFormReturn } from "react-hook-form";
+import { FormData } from "@/types/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { mockManagers, departments } from "@/data/mockData";
+import { isWeekend } from "@/utils/formUtils";
 
 interface JobDetailsStepProps {
   form: UseFormReturn<FormData>;
 }
 
 export function JobDetailsStep({ form }: JobDetailsStepProps) {
-  const { register, watch, setValue, formState: { errors } } = form;
-  
-  const [minDate, setMinDate] = useState('');
-  const [maxDate, setMaxDate] = useState('');
-  
-  const selectedDepartment = watch('department');
-  const selectedJobType = watch('jobType');
-  const dateOfBirth = watch('dateOfBirth');
-  const startDate = watch('startDate');
+  const {
+    register,
+    watch,
+    setValue,
+    formState: { errors },
+  } = form;
+
+  const [minDate, setMinDate] = useState("");
+  const [maxDate, setMaxDate] = useState("");
+
+  const selectedDepartment = watch("department");
+  const selectedJobType = watch("jobType");
+  const startDate = watch("startDate");
 
   useEffect(() => {
-    setMinDate(new Date().toISOString().split('T')[0]);
-    setMaxDate(new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]);
+    setMinDate(new Date().toISOString().split("T")[0]);
+    setMaxDate(
+      new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0]
+    );
   }, []);
 
   const filteredManagers = mockManagers.filter(
-    manager => manager.department === selectedDepartment
+    (manager) => manager.department === selectedDepartment
   );
 
   const getSalaryPlaceholder = () => {
-    if (selectedJobType === 'Contract') {
-      return '$75 (hourly rate)';
+    if (selectedJobType === "Contract") {
+      return "$75 (hourly rate)";
     }
-    return '$65,000 (annual salary)';
+    return "$65,000 (annual salary)";
   };
 
   const validateSalary = (value: number) => {
-    if (selectedJobType === 'Contract') {
+    if (selectedJobType === "Contract") {
       return value >= 50 && value <= 150;
     }
     return value >= 30000 && value <= 200000;
   };
 
   // Validate weekend restriction
-  const isWeekendStartDate = startDate && isWeekend(startDate) && 
-    (selectedDepartment === 'HR' || selectedDepartment === 'Finance');
+  const isWeekendStartDate =
+    startDate &&
+    isWeekend(startDate) &&
+    (selectedDepartment === "HR" || selectedDepartment === "Finance");
 
   return (
     <Card>
@@ -64,7 +86,10 @@ export function JobDetailsStep({ form }: JobDetailsStepProps) {
       <CardContent className="space-y-6">
         <div>
           <Label htmlFor="department">Department *</Label>
-          <Select value={selectedDepartment} onValueChange={(value) => setValue('department', value)}>
+          <Select
+            value={selectedDepartment}
+            onValueChange={(value) => setValue("department", value)}
+          >
             <SelectTrigger className="mt-1">
               <SelectValue placeholder="Select a department" />
             </SelectTrigger>
@@ -77,7 +102,9 @@ export function JobDetailsStep({ form }: JobDetailsStepProps) {
             </SelectContent>
           </Select>
           {errors.department && (
-            <p className="text-sm text-red-600 mt-1">{errors.department.message}</p>
+            <p className="text-sm text-red-600 mt-1">
+              {errors.department.message}
+            </p>
           )}
         </div>
 
@@ -85,12 +112,14 @@ export function JobDetailsStep({ form }: JobDetailsStepProps) {
           <Label htmlFor="positionTitle">Position Title *</Label>
           <Input
             id="positionTitle"
-            {...register('positionTitle')}
+            {...register("positionTitle")}
             placeholder="e.g., Senior Software Engineer"
             className="mt-1"
           />
           {errors.positionTitle && (
-            <p className="text-sm text-red-600 mt-1">{errors.positionTitle.message}</p>
+            <p className="text-sm text-red-600 mt-1">
+              {errors.positionTitle.message}
+            </p>
           )}
         </div>
 
@@ -99,13 +128,15 @@ export function JobDetailsStep({ form }: JobDetailsStepProps) {
           <Input
             id="startDate"
             type="date"
-            {...register('startDate')}
+            {...register("startDate")}
             className="mt-1"
             min={minDate}
             max={maxDate}
           />
           {errors.startDate && (
-            <p className="text-sm text-red-600 mt-1">{errors.startDate.message}</p>
+            <p className="text-sm text-red-600 mt-1">
+              {errors.startDate.message}
+            </p>
           )}
           {isWeekendStartDate && (
             <p className="text-sm text-red-600 mt-1">
@@ -118,7 +149,7 @@ export function JobDetailsStep({ form }: JobDetailsStepProps) {
           <Label>Job Type *</Label>
           <RadioGroup
             value={selectedJobType}
-            onValueChange={(value) => setValue('jobType', value as any)}
+            onValueChange={(value) => setValue("jobType", value as any)}
             className="mt-1"
           >
             <div className="flex items-center space-x-2">
@@ -135,41 +166,51 @@ export function JobDetailsStep({ form }: JobDetailsStepProps) {
             </div>
           </RadioGroup>
           {errors.jobType && (
-            <p className="text-sm text-red-600 mt-1">{errors.jobType.message}</p>
+            <p className="text-sm text-red-600 mt-1">
+              {errors.jobType.message}
+            </p>
           )}
         </div>
 
         <div>
           <Label htmlFor="salaryExpectation">
-            Salary Expectation * 
-            {selectedJobType === 'Contract' ? ' ($50-$150/hour)' : ' ($30,000-$200,000/year)'}
+            Salary Expectation *
+            {selectedJobType === "Contract"
+              ? " ($50-$150/hour)"
+              : " ($30,000-$200,000/year)"}
           </Label>
           <Input
             id="salaryExpectation"
             type="number"
-            {...register('salaryExpectation', { 
+            {...register("salaryExpectation", {
               valueAsNumber: true,
-              validate: validateSalary
+              validate: validateSalary,
             })}
             placeholder={getSalaryPlaceholder()}
             className="mt-1"
           />
           {errors.salaryExpectation && (
-            <p className="text-sm text-red-600 mt-1">{errors.salaryExpectation.message}</p>
+            <p className="text-sm text-red-600 mt-1">
+              {errors.salaryExpectation.message}
+            </p>
           )}
         </div>
 
         <div>
           <Label htmlFor="manager">Manager *</Label>
           <Select
-            value={watch('manager')}
-            onValueChange={(value) => setValue('manager', value)}
+            value={watch("manager")}
+            onValueChange={(value) => setValue("manager", value)}
             disabled={!selectedDepartment}
           >
             <SelectTrigger className="mt-1">
-              <SelectValue placeholder={
-                selectedDepartment ? "Select a manager" : "Select department first"
-              } />
+              <SelectValue
+                placeholder={
+                  selectedDepartment
+                    ? "Select a manager"
+                    : "Select department first"
+                }
+              />
             </SelectTrigger>
             <SelectContent>
               {filteredManagers.map((manager) => (
@@ -180,7 +221,9 @@ export function JobDetailsStep({ form }: JobDetailsStepProps) {
             </SelectContent>
           </Select>
           {errors.manager && (
-            <p className="text-sm text-red-600 mt-1">{errors.manager.message}</p>
+            <p className="text-sm text-red-600 mt-1">
+              {errors.manager.message}
+            </p>
           )}
         </div>
       </CardContent>
